@@ -162,9 +162,11 @@ function _getData() {
 
           case 5:
             data = _context.sent;
+            // const text = await data.text();
+            console.log(data);
             return _context.abrupt("return", data);
 
-          case 7:
+          case 8:
           case "end":
             return _context.stop();
         }
@@ -174,7 +176,7 @@ function _getData() {
   return _getData.apply(this, arguments);
 }
 
-getData('https://champmastery.xleay.workers.dev/api/?region=europe&endpoint=/lol/match/v5/matches/by-puuid/{puuid}/ids&puuid=bDL6N71AYFjleZiWPBkTxAwZplB1itxIfXRn8w9hvzgdobjO7BvLpXZIhh6OTExkFJFS4npI7ZQfxg&count=10');
+getData('https://champmastery.xleay.workers.dev/api/?region=euw1&endpoint=/lol/summoner/v4/summoners/by-name/{summonerName}&summonerName=xleay');
 },{}],"C:/Users/xLeay.DESKTOP-6B07JFG/AppData/Local/Yarn/Data/global/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -203,7 +205,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55773" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56212" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

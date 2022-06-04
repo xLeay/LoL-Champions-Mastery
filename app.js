@@ -18,8 +18,10 @@ async function getData(url) {
     const response = await fetch(url);
     const data = await response.json();
     // const text = await data.text();
+
+    console.log(data);
     return data;
 }
 
-getData('https://champmastery.xleay.workers.dev/api/?region=europe&endpoint=/lol/match/v5/matches/by-puuid/{puuid}/ids&puuid=bDL6N71AYFjleZiWPBkTxAwZplB1itxIfXRn8w9hvzgdobjO7BvLpXZIhh6OTExkFJFS4npI7ZQfxg&count=10')
+getData('https://champmastery.xleay.workers.dev/api/?region=euw1&endpoint=/lol/summoner/v4/summoners/by-name/{summonerName}&summonerName=xleay')
 
