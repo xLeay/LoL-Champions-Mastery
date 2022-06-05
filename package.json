@@ -3,7 +3,7 @@
     "author": "xLeay <LarkyRiver@gmail.com>",
     "license": "MIT",
     "scripts": {
-      "dev": "parcel index.html",
+      "dev": "parcel build d.html && parcel build summoner.html && parcel index.html",
       "build": "parcel build index.html"
     },
     "devDependencies": {

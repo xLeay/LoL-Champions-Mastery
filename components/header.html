@@ -1,0 +1,32 @@
+<nav>
+    <a href="/">
+        <div class="logo_wrap">
+            <img src="src/img/lux.jpg" class="lux" alt="Astro Groove Lux icon" height="50" width="50">
+        </div>
+    </a>
+
+    <form autocomplete="off" id="js-search" onSubmit="return false" action="summoner.html" method="get">
+        <div class="search">
+            <div class="search__region" id="js-search_region">
+                <select name="region" id="js-region" class="selectmenu">
+                    <option value="euw1">EUW</option>
+                    <option value="eun1">EUNE</option>
+                    <option value="kr">KR</option>
+                    <option value="na1">NA</option>
+                    <option value="br1">BR</option>
+                    <option value="jp1">JP</option>
+                    <option value="la1">LA</option>
+                    <option value="oc1">OCE</option>
+                    <option value="ru">RU</option>
+                    <option value="tr1">TR</option>
+                </select>
+            </div>
+
+            <div class="search__name">
+                <input type="text" placeholder="Summoner's name..." class="search_name" id="js-search_input">
+                <span class="material-symbols-outlined search_icon">search</span>
+            </div>
+
+        </div>
+    </form>
+</nav>

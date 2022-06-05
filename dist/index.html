@@ -19,18 +19,20 @@
     <title>Lol champion mastery</title>
     <link rel="stylesheet" href="/app.ae05fb60.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer=""></script>
 <script src="/app.ae05fb60.js"></script></head>
 
 <body>
     <nav>
+    <a href="/">
         <div class="logo_wrap">
             <img src="/lux.bbba786d.jpg" class="lux" alt="Astro Groove Lux icon" height="50" width="50">
         </div>
+    </a>
 
+    <form autocomplete="off" id="js-search" onSubmit="return false" action="summoner.html" method="get">
         <div class="search">
             <div class="search__region" id="js-search_region">
-                <!-- <p>EUW</p> -->
-                <!-- <div class="arrow_down"></div> -->
                 <select name="region" id="js-region" class="selectmenu">
                     <option value="euw1">EUW</option>
                     <option value="eun1">EUNE</option>
@@ -42,49 +44,76 @@
                     <option value="oc1">OCE</option>
                     <option value="ru">RU</option>
                     <option value="tr1">TR</option>
-
-            </select></div>
+                </select>
+            </div>
 
             <div class="search__name">
                 <input type="text" placeholder="Summoner's name..." class="search_name" id="js-search_input">
                 <span class="material-symbols-outlined search_icon">search</span>
             </div>
-        </div>
-    </nav>
 
-    <div class="tooltip">
-        <img src="/qmark.aad0777b.png" class="tooltip__img" alt="League of Legends Question mark ping" height="42">
-        <span class="tooltip__text">The purpose of this website is to find a League of Legends player’s champion
-            mastery. <br> You just have to type a Summoner’s name in the bar and choose the mastery of which champion
-            you want to see.</span>
+        </div>
+    </form>
+</nav>
+
+    <div class="content">
+        <div class="tooltip">
+    <img src="/qmark.aad0777b.png" class="tooltip__img" alt="League of Legends Question mark ping" height="42">
+    <span class="tooltip__text">The purpose of this website is to find a League of Legends player’s champion
+        mastery. <br> You just have to type a Summoner’s name in the bar and choose the mastery of which champion
+        you want to see.</span>
+</div>
+
+<section class="fav_summoner">
+    <div class="section__title">
+        <p class="section__title_p">Favorite Summoners</p>
     </div>
 
-    <section class="fav_summoner">
-        <div class="section__title">
-            <p class="section__title_p">Favorite Summoners</p>
+    <div class="section__items_container">
+        <div class="section__items">
+            <div class="section__items_wrap">
+                <p class="section__items_names">xLeay</p>
+                <span class="material-symbols-outlined">grade</span>
+            </div>
+
+            <div class="section__items_wrap">
+                <p class="section__items_names">Irelking</p>
+                <span class="material-symbols-outlined">grade</span>
+            </div>
+
+            <div class="section__items_wrap last_name">
+                <p class="section__items_names">Yozu</p>
+                <span class="material-symbols-outlined">grade</span>
+            </div>
         </div>
+    </div>
+</section>
+    </div>
 
-        <div class="section__items_container">
-            <div class="section__items">
-                <div class="section__items_wrap">
-                    <p class="section__items_names">xLeay</p>
-                    <span class="material-symbols-outlined">grade</span>
-                </div>
 
-                <div class="section__items_wrap">
-                    <p class="section__items_names">Irelking</p>
-                    <span class="material-symbols-outlined">grade</span>
-                </div>
 
-                <div class="section__items_wrap last_name">
-                    <p class="section__items_names">Yozu</p>
-                    <span class="material-symbols-outlined">grade</span>
+
+    <!-- <input id="filterInput" placeholder="Filter names"></input>
+    <ul class="listaus" id="names"></ul> -->
+
+    <section class="mastery">
+        <div class="summoner_hero">
+            <div class="summoner_hero__summoner">
+                <p class="summoner_hero__p">mastery:</p>
+                <div class="search__mastery">
+                    <input type="text" class="search_mastery" id="filterInput" placeholder="Lux, Vex, Draven, ...">
                 </div>
             </div>
         </div>
+        <ul class="listaus" id="names"></ul>
+
+        <div class="champ_info__card"></div>
     </section>
 
-    <script src="/app.c328ef1a.js"></script>
-</body>
 
-</html>
+
+
+    <script src="/app.c328ef1a.js"></script>
+
+
+</body></html>
