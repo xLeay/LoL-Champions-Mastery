@@ -170,7 +170,7 @@ input::placeholder {
     position: absolute;
     z-index: 1;
     top: -35%;
-    left: 150%;
+    left: 100%;
 
     color: #131313;
     line-height: 0.9rem;
@@ -178,7 +178,7 @@ input::placeholder {
 
     visibility: hidden;
     opacity: 0;
-    transform: translateY(2px);
+    transform: translateY(5px);
     transition: all 0.2s ease;
 }
 
@@ -342,6 +342,12 @@ section {
 
 .summoner_icon_handler .js-star {
     font-size: 36px;
+}
+
+.js-star {
+    border: 1px solid #000;
+    cursor: default;
+    user-select: none;
 }
 
 .mastery {

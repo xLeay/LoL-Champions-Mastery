@@ -24,7 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
         "CHALLENGER": "https://i.imgur.com/Bf5V2s5.png"
     };
 
-    let star;
     let selectedServer;
     let nickname;
     let champData = require('./champ.json');
@@ -42,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // sessionStorage.clear();
     // localStorage.clear();
 
+    const en = "ouioui";
 
 
     async function getData(url) {
@@ -58,6 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
             rankData =
                 getRankData(`https://champmastery.xleay.workers.dev/api/?region=${selectedServer}&endpoint=/lol/league/v4/entries/by-summoner/${data.id}`);
         }, 500);
+
         return data;
     }
 
@@ -84,38 +85,35 @@ document.addEventListener('DOMContentLoaded', () => {
         searchInput.value = '';
         searchIcon.classList.remove('search_icon--active');
         clearChampionCard();
-        getData(`https://champmastery.xleay.workers.dev/api/?region=${selectedServer}&endpoint=/lol/summoner/v4/summoners/by-name/{summonerName}&summonerName=${nickname}`)
+        getData(`https://champmastery.xleay.workers.dev/api/?region=${selectedServer}&endpoint=/lol/summoner/v4/summoners/by-name/{summonerName}&summonerName=${nickname}`);
     });
 
 
     function getSumm(data) {
-        star = document.querySelector('.js-star');
         content.innerHTML = `
             <section class="summoner">
-            <div class="summoner_hero">
-                <div class="summoner_hero__summoner">
-                    <p class="summoner_hero__p">summoner:</p>
-                    <p class="summoner_hero__name js-summoner">${data.name}</p>
+                <div class="summoner_hero">
+                    <div class="summoner_hero__summoner">
+                        <p class="summoner_hero__p">summoner:</p>
+                        <p class="summoner_hero__name js-summoner">${data.name}</p>
+                    </div>
+
+                    <div class="summoner_hero__region">
+                        <p class="summoner_hero__p">region:</p>
+                        <p class="summoner_hero__name js-region">${allServersAlpha[sb.selectedIndex]}</p>
+                    </div>
                 </div>
 
-                <div class="summoner_hero__region">
-                    <p class="summoner_hero__p">region:</p>
-                    <p class="summoner_hero__name js-region">${allServersAlpha[sb.selectedIndex]}</p>
-                </div>
-            </div>
-
-            <div class="summoner_icon">
-                <div class="summoner_icon_handler">
-                    <div class="summoner_icon__img">
-                        <img class="js-summoner_icon" src="https://ddragon.leagueoflegends.com/cdn/12.10.1/img/profileicon/${data.profileIconId}.png" alt="Summoner icon" height="50" width="50">
-                        <div class="summoner_icon__level">
-                            <p class="summoner_icon__level_p js-summoner_level">${data.summonerLevel}</p>
+                <div class="summoner_icon">
+                    <div class="summoner_icon_handler">
+                        <div class="summoner_icon__img">
+                            <img class="js-summoner_icon" src="https://ddragon.leagueoflegends.com/cdn/12.10.1/img/profileicon/${data.profileIconId}.png" alt="Summoner icon" height="50" width="50">
+                            <div class="summoner_icon__level">
+                                <p class="summoner_icon__level_p js-summoner_level">${data.summonerLevel}</p>
+                            </div>
                         </div>
                     </div>
-                    <span class="material-symbols-outlined js-star">grade</span>
                 </div>
-
-            </div>
             </section>
         `;
         loadHTML();
@@ -231,12 +229,13 @@ document.addEventListener('DOMContentLoaded', () => {
                                 if (value.hasOwnProperty(champ)) {
                                     if (value[champ].championId == championId) {
 
-                                        // console.log(value[champ].championId, value[champ].championPoints);
+                                        console.log(value[champ].championId, value[champ].championPoints);
                                         championMastery = value[champ].championPoints;
                                         return championMastery;
 
                                     } else {
-                                        console.log('no');
+                                        console.log('You don\'t have mastery points for this champion');
+                                        championMastery = 0;
                                     }
                                 }
                             }
@@ -303,8 +302,5 @@ document.addEventListener('DOMContentLoaded', () => {
         listaus.style.display = 'none';
         champAlreadyClicked = [];
     }
-
-    star.addEventListener('click', dd);
-
-    async function dd(data) { alert("bob") }; // TODO: faire le système de summoner favoris avec les étoiles.
+    // TODO : Dark mode et style PC
 });

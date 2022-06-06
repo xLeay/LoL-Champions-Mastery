@@ -535,6 +535,10 @@ module.exports = {
     "key": "235",
     "img": "https://ddragon.leagueoflegends.com/cdn/12.10.1/img/champion/Senna.png"
   },
+  "Seraphine": {
+    "key": "147",
+    "img": "https://ddragon.leagueoflegends.com/cdn/12.10.1/img/champion/Seraphine.png"
+  },
   "Sett": {
     "key": "875",
     "img": "https://ddragon.leagueoflegends.com/cdn/12.10.1/img/champion/Sett.png"
@@ -772,7 +776,6 @@ document.addEventListener('DOMContentLoaded', function () {
     "GRANDMASTER": "https://i.imgur.com/qzRiTSc.png",
     "CHALLENGER": "https://i.imgur.com/Bf5V2s5.png"
   };
-  var star;
   var selectedServer;
   var nickname;
 
@@ -790,6 +793,8 @@ document.addEventListener('DOMContentLoaded', function () {
   }; // sessionStorage.clear();
   // localStorage.clear();
 
+
+  var en = "ouioui";
 
   function getData(_x) {
     return _getData.apply(this, arguments);
@@ -908,8 +913,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   function getSumm(data) {
-    star = document.querySelector('.js-star');
-    content.innerHTML = "\n            <section class=\"summoner\">\n            <div class=\"summoner_hero\">\n                <div class=\"summoner_hero__summoner\">\n                    <p class=\"summoner_hero__p\">summoner:</p>\n                    <p class=\"summoner_hero__name js-summoner\">".concat(data.name, "</p>\n                </div>\n\n                <div class=\"summoner_hero__region\">\n                    <p class=\"summoner_hero__p\">region:</p>\n                    <p class=\"summoner_hero__name js-region\">").concat(allServersAlpha[sb.selectedIndex], "</p>\n                </div>\n            </div>\n\n            <div class=\"summoner_icon\">\n                <div class=\"summoner_icon_handler\">\n                    <div class=\"summoner_icon__img\">\n                        <img class=\"js-summoner_icon\" src=\"https://ddragon.leagueoflegends.com/cdn/12.10.1/img/profileicon/").concat(data.profileIconId, ".png\" alt=\"Summoner icon\" height=\"50\" width=\"50\">\n                        <div class=\"summoner_icon__level\">\n                            <p class=\"summoner_icon__level_p js-summoner_level\">").concat(data.summonerLevel, "</p>\n                        </div>\n                    </div>\n                    <span class=\"material-symbols-outlined js-star\">grade</span>\n                </div>\n\n            </div>\n            </section>\n        ");
+    content.innerHTML = "\n            <section class=\"summoner\">\n                <div class=\"summoner_hero\">\n                    <div class=\"summoner_hero__summoner\">\n                        <p class=\"summoner_hero__p\">summoner:</p>\n                        <p class=\"summoner_hero__name js-summoner\">".concat(data.name, "</p>\n                    </div>\n\n                    <div class=\"summoner_hero__region\">\n                        <p class=\"summoner_hero__p\">region:</p>\n                        <p class=\"summoner_hero__name js-region\">").concat(allServersAlpha[sb.selectedIndex], "</p>\n                    </div>\n                </div>\n\n                <div class=\"summoner_icon\">\n                    <div class=\"summoner_icon_handler\">\n                        <div class=\"summoner_icon__img\">\n                            <img class=\"js-summoner_icon\" src=\"https://ddragon.leagueoflegends.com/cdn/12.10.1/img/profileicon/").concat(data.profileIconId, ".png\" alt=\"Summoner icon\" height=\"50\" width=\"50\">\n                            <div class=\"summoner_icon__level\">\n                                <p class=\"summoner_icon__level_p js-summoner_level\">").concat(data.summonerLevel, "</p>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </section>\n        ");
     loadHTML();
   }
 
@@ -1001,11 +1005,12 @@ document.addEventListener('DOMContentLoaded', function () {
             for (champ in value) {
               if (value.hasOwnProperty(champ)) {
                 if (value[champ].championId == championId) {
-                  // console.log(value[champ].championId, value[champ].championPoints);
+                  console.log(value[champ].championId, value[champ].championPoints);
                   championMastery = value[champ].championPoints;
                   return championMastery;
                 } else {
-                  console.log('no');
+                  console.log('You don\'t have mastery points for this champion');
+                  championMastery = 0;
                 }
               }
             }
@@ -1039,33 +1044,8 @@ document.addEventListener('DOMContentLoaded', function () {
     filterInput.value = '';
     listaus.style.display = 'none';
     champAlreadyClicked = [];
-  }
+  } // TODO : Dark mode et style PC
 
-  star.addEventListener('click', dd);
-
-  function dd(_x4) {
-    return _dd.apply(this, arguments);
-  }
-
-  function _dd() {
-    _dd = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(data) {
-      return _regeneratorRuntime().wrap(function _callee4$(_context4) {
-        while (1) {
-          switch (_context4.prev = _context4.next) {
-            case 0:
-              alert("bob");
-
-            case 1:
-            case "end":
-              return _context4.stop();
-          }
-        }
-      }, _callee4);
-    }));
-    return _dd.apply(this, arguments);
-  }
-
-  ; // TODO: faire le système de summoner favoris avec les étoiles.
 });
 },{"./champ.json":"champ.json"}],"C:/Users/xLeay.DESKTOP-6B07JFG/AppData/Local/Yarn/Data/global/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
@@ -1095,7 +1075,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51407" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54547" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
