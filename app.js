@@ -9,9 +9,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const content = document.querySelector('.content');
     const mastery = document.querySelector('.mastery');
     const champInfo = document.querySelector('.champ_info__card');
+    const listaus = document.querySelector('.listaus');
+
+    const allRanks = {
+        "UNRANKED": "https://i.imgur.com/LZFsBz1.png",
+        "IRON": "https://i.imgur.com/RE2oI4q.png",
+        "BRONZE": "https://i.imgur.com/kVp33uW.png",
+        "SILVER": "https://i.imgur.com/x8nxi0a.png",
+        "GOLD": "https://i.imgur.com/vl1NFHd.png",
+        "PLATINUM": "https://i.imgur.com/B4po1BT.png",
+        "DIAMOND": "https://i.imgur.com/9TjI414.png",
+        "MASTER": "https://i.imgur.com/3NvnpCi.png",
+        "GRANDMASTER": "https://i.imgur.com/qzRiTSc.png",
+        "CHALLENGER": "https://i.imgur.com/Bf5V2s5.png"
+    };
+
+    let star;
     let selectedServer;
     let nickname;
     let champData = require('./champ.json');
+    let masteryData;
+    let rankData;
 
     searchInput.oninput = function () {
         if (searchInput.value.length > 0) {
@@ -21,14 +39,40 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    // sessionStorage.clear();
+    // localStorage.clear();
+
+
 
     async function getData(url) {
         const response = await fetch(url);
         const data = await response.json();
         // const text = await data.text();
 
-        console.log(data);
+        // console.log(data);
         getSumm(data);
+        masteryData =
+            getMasteryData(`https://champmastery.xleay.workers.dev/api/?region=${selectedServer}&endpoint=/lol/champion-mastery/v4/champion-masteries/by-summoner/${data.id}`);
+
+        setTimeout(() => {
+            rankData =
+                getRankData(`https://champmastery.xleay.workers.dev/api/?region=${selectedServer}&endpoint=/lol/league/v4/entries/by-summoner/${data.id}`);
+        }, 500);
+        return data;
+    }
+
+    async function getMasteryData(url) {
+        const response = await fetch(url);
+        const data = await response.json();
+        // console.log(data);
+
+        return data;
+    }
+
+    async function getRankData(url) {
+        const response = await fetch(url);
+        const data = await response.json();
+        // console.log(data);
 
         return data;
     }
@@ -39,43 +83,43 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log(selectedServer, nickname);
         searchInput.value = '';
         searchIcon.classList.remove('search_icon--active');
+        clearChampionCard();
         getData(`https://champmastery.xleay.workers.dev/api/?region=${selectedServer}&endpoint=/lol/summoner/v4/summoners/by-name/{summonerName}&summonerName=${nickname}`)
     });
 
 
     function getSumm(data) {
+        star = document.querySelector('.js-star');
         content.innerHTML = `
-        <section class="summoner">
-        <div class="summoner_hero">
-            <div class="summoner_hero__summoner">
-                <p class="summoner_hero__p">summoner:</p>
-                <p class="summoner_hero__name js-summoner">${data.name}</p>
-            </div>
-
-            <div class="summoner_hero__region">
-                <p class="summoner_hero__p">region:</p>
-                <p class="summoner_hero__name js-region">${allServersAlpha[sb.selectedIndex]}</p>
-            </div>
-        </div>
-
-        <div class="summoner_icon">
-            <div class="summoner_icon_handler">
-                <div class="summoner_icon__img">
-                    <img class="js-summoner_icon" src="https://ddragon.leagueoflegends.com/cdn/12.10.1/img/profileicon/${data.profileIconId}.png" alt="Summoner icon" height="50" width="50">
-                    <div class="summoner_icon__level">
-                        <p class="summoner_icon__level_p js-summoner_level">${data.summonerLevel}</p>
-                    </div>
+            <section class="summoner">
+            <div class="summoner_hero">
+                <div class="summoner_hero__summoner">
+                    <p class="summoner_hero__p">summoner:</p>
+                    <p class="summoner_hero__name js-summoner">${data.name}</p>
                 </div>
-                <span class="material-symbols-outlined star">grade</span>
+
+                <div class="summoner_hero__region">
+                    <p class="summoner_hero__p">region:</p>
+                    <p class="summoner_hero__name js-region">${allServersAlpha[sb.selectedIndex]}</p>
+                </div>
             </div>
 
-        </div>
-        </section>
-        `;
+            <div class="summoner_icon">
+                <div class="summoner_icon_handler">
+                    <div class="summoner_icon__img">
+                        <img class="js-summoner_icon" src="https://ddragon.leagueoflegends.com/cdn/12.10.1/img/profileicon/${data.profileIconId}.png" alt="Summoner icon" height="50" width="50">
+                        <div class="summoner_icon__level">
+                            <p class="summoner_icon__level_p js-summoner_level">${data.summonerLevel}</p>
+                        </div>
+                    </div>
+                    <span class="material-symbols-outlined js-star">grade</span>
+                </div>
 
+            </div>
+            </section>
+        `;
         loadHTML();
     }
-
 
     function loadHTML(data) {
 
@@ -85,13 +129,18 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(text => content.innerHTML += text);
     }
 
-    const listaus = document.querySelector('.listaus');
+    function addFavoriteSummoner(data) {
+
+        let summonerInfo = [allServersAlpha[sb.selectedIndex], data.profileIconId, data.summonerLevel];
+        localStorage.setItem(data.name, JSON.stringify(summonerInfo));
+        let storedSummonerInfo = JSON.parse(localStorage.getItem(data.name));
+
+    }
 
     let champId = 1;
-    for (let key in champData) {
-        if (champData.hasOwnProperty(key)) {
-            // console.log(key + " -> " + champData[key]);
-
+    for (let cle in champData) {
+        if (champData.hasOwnProperty(cle)) {
+            // console.log(`${cle} : ${champData[cle].key}`);
 
             let li = document.createElement('li');
             li.classList.add('listaus__item');
@@ -99,10 +148,10 @@ document.addEventListener('DOMContentLoaded', () => {
             li.innerHTML = `
                     <div class="listaus__item_wrap">
                         <div class="listaus__item__img">
-                            <img src="${champData[key]}" alt="${key}" height="40" width="40" loading="lazy">
+                            <img src="${champData[cle].img}" alt="League of Legends icon of the champion ${cle}" height="40" width="40" loading="lazy">
                         </div>
                         <div class="listaus__item__name">
-                            <p>${key}</p>
+                            <p>${cle}</p>
                         </div>
                     </div>
                     `;
@@ -115,6 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let filterInput = document.getElementById('filterInput');
     // Add event listener
     filterInput.addEventListener('keyup', filterNames);
+    listaus.addEventListener('mouseover', createChampionCard);
 
 
     function filterNames() {
@@ -125,8 +175,6 @@ document.addEventListener('DOMContentLoaded', () => {
         let ul = document.getElementById('names');
         // Get lis from ul
         let li = ul.querySelectorAll('li.listaus__item');
-
-        let champAlreadyClicked = [];
 
         // Loop through collection-item list
         let counter = 0;
@@ -148,50 +196,115 @@ document.addEventListener('DOMContentLoaded', () => {
                     listaus.style.display = 'none';
                 }
 
-                console.clear();
-                console.log(counter);
+                // console.clear();
+                // console.log(counter);
             } else {
                 listaus.style.display = 'none';
             }
-
-            let champInfoCard = document.createElement('div');
-            champInfoCard.classList.add('champ_info__card__item');
-
-            li[i].addEventListener('click', function () {
-                let name = this.getElementsByTagName('p')[0].innerHTML;
-                console.log(this);
-
-                if (!champAlreadyClicked.includes(name)) {
-                champInfoCard.innerHTML = `
-                    <div class="champ_info__card_img">
-                        <img src="https://ddragon.leagueoflegends.com/cdn/12.10.1/img/champion/${name}.png" alt="${name}" height="40" width="40">
-                    </div>
-                    <div class="champ_info__card_name">
-                        <p>${name}</p>
-                    </div>
-                `;
-                }
-
-                champInfo.appendChild(champInfoCard);
-
-                champAlreadyClicked.push(name);
-
-                // TODO - Ajouter les cards des champs cliqués avec leur maitrise et leurt rank
-            });
         }
-
-
-        
     }
 
+    let champAlreadyClicked = [];
+    function createChampionCard() {
 
+        // console.log(champAlreadyClicked);
+        let ul = document.getElementById('names');
+        let li = ul.querySelectorAll('li.listaus__item');
 
+        li.forEach(item => {
+            item.addEventListener('click', function () {
+                let name = this.getElementsByTagName('p')[0].innerHTML;
 
+                if (champAlreadyClicked.includes(name)) { }
+                else {
 
+                    let championId = champData[name].key;
+                    // console.log(championId);
 
+                    let championMastery;
+                    let rankDivision;
+                    let rankTier;
 
+                    masteryData.then(
+                        value => {
+                            for (champ in value) {
+                                if (value.hasOwnProperty(champ)) {
+                                    if (value[champ].championId == championId) {
 
+                                        // console.log(value[champ].championId, value[champ].championPoints);
+                                        championMastery = value[champ].championPoints;
+                                        return championMastery;
 
+                                    } else {
+                                        console.log('no');
+                                    }
+                                }
+                            }
+                        }
+                    );
 
+                    rankData.then(
+                        value => {
+                            for (rank in value) {
+                                if (value.hasOwnProperty(rank)) {
+                                    rankDivision = value[rank].rank;
+                                    rankTier = value[rank].tier;
+                                    console.log(rankTier, rankDivision);
+                                }
+                            }
+                        }
+                    );
 
+                    let champInfoCard = document.createElement('div');
+                    champInfoCard.classList.add('champ_info__card__item');
+                    champAlreadyClicked.push(name);
+
+                    setTimeout(() => {
+
+                        rankTier === undefined ? rankTier = 'UNRANKED' : rankTier;
+                        champInfoCard.innerHTML = `
+                            <div class="champ_info__card__item__part1">
+                                <div class="champ_info__card_img">
+                                    <img src="https://ddragon.leagueoflegends.com/cdn/12.10.1/img/champion/${name}.png" alt="${name}" height="40" width="40">
+                                </div>
+                                <div class="champ_info__card_name">
+                                    <p>${name}</p>
+                                </div>
+                            </div>
+
+                            <div class="separator"></div>
+
+                            <div class="champ_info__card__item__part2">
+                                <div class="champ_info__card_rank">
+                                    <img src="${allRanks[rankTier]}" alt="Highest League of Legends Ranked Icon" height="40" width="40">
+                                </div>
+                            </div>
+
+                            <div class="separator"></div>
+
+                            <div class="champ_info__card__item__part3">
+                                <div class="champ_info__card_mastery">
+                                    <p>${championMastery}</p>
+                                </div>
+                            </div>
+                        `;
+                        champInfo.appendChild(champInfoCard);
+                    }, 100);
+                }
+
+                listaus.style.display = 'none';
+            });
+        });
+    }
+
+    function clearChampionCard() {
+        champInfo.innerHTML = '';
+        filterInput.value = '';
+        listaus.style.display = 'none';
+        champAlreadyClicked = [];
+    }
+
+    star.addEventListener('click', dd);
+
+    async function dd(data) { alert("bob") }; // TODO: faire le système de summoner favoris avec les étoiles.
 });
