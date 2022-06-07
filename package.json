@@ -1,16 +1,15 @@
 {
-    "repository": "https://github.com/xLeay/LoL-Champions-Mastery",
-    "author": "xLeay <LarkyRiver@gmail.com>",
-    "license": "MIT",
-    "scripts": {
-      "dev": "parcel build d.html && parcel build summoner.html && parcel index.html",
-      "build": "parcel build index.html"
-    },
-    "devDependencies": {
-      "parcel": "^2.6.0"
-    },
-    "dependencies": {
-      "posthtml-include": "^1.7.4"
-    }
+  "repository": "https://github.com/xLeay/LoL-Champions-Mastery",
+  "author": "xLeay <LarkyRiver@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "parcel build d.html && parcel build summoner.html && parcel index.html",
+    "build": "parcel build index.html"
+  },
+  "devDependencies": {
+    "parcel": "^2.6.0"
+  },
+  "dependencies": {
+    "posthtml-include": "^1.7.4"
   }
-  
+}
