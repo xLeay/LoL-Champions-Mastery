@@ -316,14 +316,39 @@ section {
   display: flex;
 }
 
-.summoner_icon_handler .js-star {
+.summoner_icon_handler .star {
   font-size: 36px;
 }
 
 .js-star {
+  border: 1px solid #000;
+}
+
+.material-symbols-rounded {
   cursor: default;
   user-select: none;
-  border: 1px solid #000;
+}
+
+@keyframes star-active {
+  0% {
+    color: #1b89ce;
+    transform: scale(1);
+  }
+
+  25% {
+    color: #65c4ff;
+    transform: scale(1.5);
+  }
+
+  100% {
+    color: #1b89ce;
+    transform: scale(1);
+  }
+}
+
+.star-active {
+  color: #1b89ce;
+  animation: star-active .5s;
 }
 
 .mastery {

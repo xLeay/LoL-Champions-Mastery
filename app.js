@@ -1,3 +1,24 @@
+function getStars() {
+
+    // setTimeout(() => {
+    //     const ss = document.querySelectorAll('.js-star')
+
+    //     console.log(ss);
+    //     ss.addEventListener('click', () => {
+    //         alert('lol');
+    //     });
+    // }, 10);
+
+    const stars = document.querySelectorAll('.js-star');
+    stars.forEach(star => {
+        star.classList.remove('js-star');
+        star.addEventListener('click', () => {
+            star.classList.toggle('star-active');
+            star.innerText = star.classList.contains('star-active') ? 'star' : 'grade';
+        });
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
 
     const searchIcon = document.querySelector('.search_icon');
@@ -41,13 +62,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // sessionStorage.clear();
     // localStorage.clear();
 
-    const en = "ouioui";
+    getStars();
 
 
     async function getData(url) {
         const response = await fetch(url);
         const data = await response.json();
-        // const text = await data.text();
+
+        // TODO : Regarder si la LocalStorage est vide ou pas sinon utiliser la LocalStorage à la place Data.
 
         // console.log(data);
         getSumm(data);
@@ -58,6 +80,8 @@ document.addEventListener('DOMContentLoaded', () => {
             rankData =
                 getRankData(`https://champmastery.xleay.workers.dev/api/?region=${selectedServer}&endpoint=/lol/league/v4/entries/by-summoner/${data.id}`);
         }, 500);
+
+        setTimeout(() => { getStars(); }, 10);
 
         return data;
     }
@@ -112,6 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <p class="summoner_icon__level_p js-summoner_level">${data.summonerLevel}</p>
                             </div>
                         </div>
+                        <span class="material-symbols-rounded star js-star">grade</span>
                     </div>
                 </div>
             </section>
