@@ -1,23 +1,85 @@
+
 function getStars() {
-
-    // setTimeout(() => {
-    //     const ss = document.querySelectorAll('.js-star')
-
-    //     console.log(ss);
-    //     ss.addEventListener('click', () => {
-    //         alert('lol');
-    //     });
-    // }, 10);
-
+    let FavoritesSummoners = [];
+    const summoner = document.querySelectorAll('js-summoner');
     const stars = document.querySelectorAll('.js-star');
+    const summonerPage = document.querySelector(".content").querySelector(".summoner");
+
     stars.forEach(star => {
         star.classList.remove('js-star');
         star.addEventListener('click', () => {
             star.classList.toggle('star-active');
             star.innerText = star.classList.contains('star-active') ? 'star' : 'grade';
+
+            if (summonerPage !== null) {
+                let summonerName = summonerPage.querySelector(".js-summoner").innerText;
+
+                if (star.classList.contains('star-active')) {
+                    console.log(FavoritesSummoners);
+                    // JSON.parse(localStorage.getItem('FavoritesSummoners'));
+                    FavoritesSummoners = JSON.parse(localStorage.getItem('FavoritesSummoners')) || [];
+                    FavoritesSummoners.push(summonerName);
+
+                    localStorage.setItem('FavoritesSummoners', JSON.stringify(FavoritesSummoners));
+                }
+
+                if (!star.classList.contains('star-active')) {
+                    FavoritesSummoners = JSON.parse(localStorage.getItem('FavoritesSummoners')) || [];
+                    FavoritesSummoners.splice(FavoritesSummoners.indexOf(summonerName), 1);
+                    localStorage.setItem('FavoritesSummoners', JSON.stringify(FavoritesSummoners));
+                }
+            }
         });
     });
 }
+// localStorage.clear();
+
+function removeFavorite(summonerName) {
+    const FavoritesSummoners = JSON.parse(localStorage.getItem('FavoritesSummoners')) || [];
+    FavoritesSummoners.splice(FavoritesSummoners.indexOf(summonerName), 1);
+    localStorage.setItem('FavoritesSummoners', JSON.stringify(FavoritesSummoners));
+}
+
+function getFavorites() {
+    const section__items_container = document.querySelector(".section__items_container");
+    // console.log(section__items_container.innerHTML);
+
+
+    if (JSON.parse(localStorage.getItem('FavoritesSummoners')).length !== 0) { section__items_container.innerHTML = ""; }
+    for (let i = 0; i < JSON.parse(localStorage.getItem('FavoritesSummoners')).length; i++) {
+        const summonerName = JSON.parse(localStorage.getItem('FavoritesSummoners'))[i];
+        const summoner = document.createElement('div');
+        let lastElementInArray;
+
+        if (i === JSON.parse(localStorage.getItem('FavoritesSummoners')).length - 1) { lastElementInArray = true; }
+        summoner.innerHTML = `
+        <div class="section__items_wrap ${lastElementInArray ? 'lastFav' : ''}">
+            <p class="section__items_names">${summonerName}</p>
+            <span class="material-symbols-rounded close">close</span>
+        </div>
+        `;
+        section__items_container.appendChild(summoner);
+    }
+
+    const close = document.querySelectorAll('.close');
+    close.forEach(close => {
+        close.addEventListener('click', () => {
+            const summonerName = close.parentElement.querySelector('.section__items_names').innerText;
+            removeFavorite(summonerName);
+            close.parentElement.remove();
+            if (JSON.parse(localStorage.getItem('FavoritesSummoners')).length == 0) { section__items_container.innerHTML = `
+                <div class="section__items_wrap no_fav">
+                    <p>You don't have any favorite summoner</p>
+                </div>
+            `; }
+        });
+    });
+}
+
+
+
+
+
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -50,6 +112,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let champData = require('./champ.json');
     let masteryData;
     let rankData;
+    let alreadyFavorite = false;
+
+    if (localStorage.getItem('FavoritesSummoners') == null) { localStorage.setItem('FavoritesSummoners', JSON.stringify([])); }
 
     searchInput.oninput = function () {
         if (searchInput.value.length > 0) {
@@ -59,10 +124,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // sessionStorage.clear();
-    // localStorage.clear();
-
     getStars();
+    getFavorites();
+
+    
+
+    
 
 
     async function getData(url) {
@@ -105,7 +172,10 @@ document.addEventListener('DOMContentLoaded', () => {
     search.addEventListener('submit', () => {
         selectedServer = allServers[sb.selectedIndex];
         nickname = searchInput.value;
-        console.log(selectedServer, nickname);
+
+        alreadyFavorite = JSON.parse(localStorage.getItem('FavoritesSummoners')).find(summoner => summoner.toLowerCase() === nickname.toLowerCase()) !== undefined;
+
+        // console.log(selectedServer, nickname);
         searchInput.value = '';
         searchIcon.classList.remove('search_icon--active');
         clearChampionCard();
@@ -136,7 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <p class="summoner_icon__level_p js-summoner_level">${data.summonerLevel}</p>
                             </div>
                         </div>
-                        <span class="material-symbols-rounded star js-star">grade</span>
+                        <span class="material-symbols-rounded star js-star ${alreadyFavorite ? 'star-active">star</span>' : '">grade</span>'}
                     </div>
                 </div>
             </section>
@@ -237,6 +307,7 @@ document.addEventListener('DOMContentLoaded', () => {
         li.forEach(item => {
             item.addEventListener('click', function () {
                 let name = this.getElementsByTagName('p')[0].innerHTML;
+                console.log(name);
 
                 if (champAlreadyClicked.includes(name)) { }
                 else {
@@ -282,14 +353,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     let champInfoCard = document.createElement('div');
                     champInfoCard.classList.add('champ_info__card__item');
                     champAlreadyClicked.push(name);
-
+                    
+                    let Wukong = name === 'Wukong';
                     setTimeout(() => {
 
                         rankTier === undefined ? rankTier = 'UNRANKED' : rankTier;
                         champInfoCard.innerHTML = `
                             <div class="champ_info__card__item__part1">
                                 <div class="champ_info__card_img">
-                                    <img src="https://ddragon.leagueoflegends.com/cdn/12.10.1/img/champion/${name}.png" alt="${name}" height="40" width="40">
+                                    <img src="https://ddragon.leagueoflegends.com/cdn/12.10.1/img/champion/${Wukong ? 'MonkeyKing' : name }.png" alt="${name}" height="40" width="40">
                                 </div>
                                 <div class="champ_info__card_name">
                                     <p>${name}</p>

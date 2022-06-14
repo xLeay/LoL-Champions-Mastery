@@ -246,9 +246,17 @@ section {
     align-items: center;
     padding-left: 10px;
     padding-right: 20px;
-    height: 35px;
+    height: 40px;
     background: #ffffff;
     position: relative;
+}
+
+.no_fav {
+    font-size: 14px;
+}
+
+.lastFav {
+    border-radius: 0 0 5px 5px;
 }
 
 .section__items_wrap::after {
@@ -262,6 +270,12 @@ section {
     background: #f0f0f0;
 }
 
+.lastFav::after {
+    content: '';
+    width: 0%;
+    height: 0px;
+}
+
 .last_name {
     border-radius: 0 0 5px 5px;
 }
@@ -269,6 +283,18 @@ section {
 .last_name::after {
     content: '';
     display: none;
+}
+
+.close {
+    border-radius: 50%;
+    padding: 3px;
+    transition: all 0.1s ease;
+}
+
+.close:hover {
+    cursor: pointer;
+    background: rgb(27, 137, 206);
+    color: #ffffff;
 }
 
 /* SUMMONER -------------------------- */

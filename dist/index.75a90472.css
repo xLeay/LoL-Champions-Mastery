@@ -223,7 +223,7 @@ section {
 }
 
 .section__items_wrap {
-  height: 35px;
+  height: 40px;
   background: #fff;
   justify-content: space-between;
   align-items: center;
@@ -231,6 +231,14 @@ section {
   padding-right: 20px;
   display: flex;
   position: relative;
+}
+
+.no_fav {
+  font-size: 14px;
+}
+
+.lastFav {
+  border-radius: 0 0 5px 5px;
 }
 
 .section__items_wrap:after {
@@ -244,6 +252,12 @@ section {
   left: 0;
 }
 
+.lastFav:after {
+  content: "";
+  width: 0%;
+  height: 0;
+}
+
 .last_name {
   border-radius: 0 0 5px 5px;
 }
@@ -251,6 +265,18 @@ section {
 .last_name:after {
   content: "";
   display: none;
+}
+
+.close {
+  border-radius: 50%;
+  padding: 3px;
+  transition: all .1s;
+}
+
+.close:hover {
+  cursor: pointer;
+  color: #fff;
+  background: #1b89ce;
 }
 
 .summoner {
