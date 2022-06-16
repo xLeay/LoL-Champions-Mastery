@@ -537,6 +537,54 @@ function removeFavorite(summonerName) {
     FavoritesSummoners.splice(FavoritesSummoners.indexOf(summonerName), 1);
     localStorage.setItem("FavoritesSummoners", JSON.stringify(FavoritesSummoners));
 }
+// const ui = {
+//     confirm: async (message) => createConfirm(message)
+// }
+// const createConfirm = (message) => {
+//     return new Promise((complete, failed) => {
+//         $('#confirmMessage').text(message)
+//         $('#confirmYes').off('click');
+//         $('#confirmNo').off('click');
+//         $('#confirmYes').on('click', () => { $('.confirm').hide(); complete(true); });
+//         $('#confirmNo').on('click', () => { $('.confirm').hide(); complete(false); });
+//         $('.confirm').show();
+//     });
+// }
+// const save = async () => {
+//     const confirm = await ui.confirm('Are you sure you want to do this?');
+//     if (confirm) {
+//         alert('yes clicked');
+//     } else {
+//         alert('no clicked');
+//     }
+// }
+async function waitForConfirmation(message) {
+    return new Promise((complete, failed)=>{
+        // sans JQuery
+        const confirm = document.createElement("div");
+        confirm.classList.add("confirm");
+        confirm.innerHTML = `
+            <div class="confirmation">
+                <div class="confirm__message">${message}</div>
+                <div class="confirm__buttons">
+                    <button class="confirm__button confirm__button--yes" id="confirmYes">Yes</button>
+                    <button class="confirm__button confirm__button--no" id="confirmNo">No</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(confirm);
+        const yes = document.querySelector("#confirmYes");
+        const no = document.querySelector("#confirmNo");
+        yes.addEventListener("click", ()=>{
+            confirm.remove();
+            complete(true);
+        });
+        no.addEventListener("click", ()=>{
+            confirm.remove();
+            complete(false);
+        });
+    });
+}
 function getFavorites() {
     const section__items_container = document.querySelector(".section__items_container");
     // console.log(section__items_container.innerHTML);
@@ -558,13 +606,16 @@ function getFavorites() {
     close1.forEach((close)=>{
         close.addEventListener("click", ()=>{
             const summonerName = close.parentElement.querySelector(".section__items_names").innerText;
-            removeFavorite(summonerName);
-            close.parentElement.remove();
-            if (JSON.parse(localStorage.getItem("FavoritesSummoners")).length == 0) section__items_container.innerHTML = `
-                <div class="section__items_wrap no_fav">
-                    <p>You don't have any favorite summoner</p>
-                </div>
-            `;
+            waitForConfirmation(`Are you sure you want to remove ${summonerName} from favorites?`).then((success)=>{
+                if (!success) return;
+                removeFavorite(summonerName);
+                close.parentElement.remove();
+                if (JSON.parse(localStorage.getItem("FavoritesSummoners")).length == 0) section__items_container.innerHTML = `
+                        <div class="section__items_wrap no_fav">
+                            <p>You don't have any favorite summoner</p>
+                        </div>
+                    `;
+            });
         });
     });
 }

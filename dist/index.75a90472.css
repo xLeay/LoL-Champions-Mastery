@@ -139,6 +139,18 @@ input::placeholder {
   background: #1b89ce;
 }
 
+.confirmation {
+  height: 50px;
+  width: 50%;
+  background: #bf1c1c;
+  border-radius: 2px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  box-shadow: 0 1px 2px #00000040;
+}
+
 .tooltip {
   margin-top: 20px;
   margin-left: var(--padding-left);
