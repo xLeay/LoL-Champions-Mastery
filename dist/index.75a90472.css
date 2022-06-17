@@ -141,14 +141,38 @@ input::placeholder {
 
 .confirmation {
   height: 50px;
-  width: 50%;
-  background: #bf1c1c;
-  border-radius: 2px;
-  flex-direction: column;
+  width: fit-content;
+  z-index: 1;
+  background: #1b89ce;
+  border-radius: 5px;
   justify-content: center;
   align-items: center;
+  gap: 10px;
+  padding: 5px 10px;
   display: flex;
-  box-shadow: 0 1px 2px #00000040;
+  position: absolute;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.confirm__message p {
+  color: #fff;
+  font-size: 14px;
+}
+
+.sep {
+  width: 1px;
+  height: 50%;
+  background: #68a6cd;
+}
+
+.undo-btn {
+  color: #fff;
+}
+
+.material-symbols-rounded.undo-btn {
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 48;
 }
 
 .tooltip {
@@ -289,6 +313,10 @@ section {
   cursor: pointer;
   color: #fff;
   background: #1b89ce;
+}
+
+.no_data {
+  border: 1px solid #000;
 }
 
 .summoner {

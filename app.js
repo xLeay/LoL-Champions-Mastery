@@ -1,3 +1,8 @@
+const searchIcon = document.querySelector('.search_icon');
+const searchInput = document.getElementById("js-search_input");
+const search = document.getElementById('js-search');
+const fakeButton = document.querySelector('.fakeButton');
+let tempLocalStorage;
 
 function getStars() {
     let FavoritesSummoners = [];
@@ -15,8 +20,6 @@ function getStars() {
                 let summonerName = summonerPage.querySelector(".js-summoner").innerText;
 
                 if (star.classList.contains('star-active')) {
-                    console.log(FavoritesSummoners);
-                    // JSON.parse(localStorage.getItem('FavoritesSummoners'));
                     FavoritesSummoners = JSON.parse(localStorage.getItem('FavoritesSummoners')) || [];
                     FavoritesSummoners.push(summonerName);
 
@@ -32,7 +35,6 @@ function getStars() {
         });
     });
 }
-// localStorage.clear();
 
 function removeFavorite(summonerName) {
     const FavoritesSummoners = JSON.parse(localStorage.getItem('FavoritesSummoners')) || [];
@@ -40,70 +42,84 @@ function removeFavorite(summonerName) {
     localStorage.setItem('FavoritesSummoners', JSON.stringify(FavoritesSummoners));
 }
 
-// const ui = {
-//     confirm: async (message) => createConfirm(message)
-// }
+const confirm = document.createElement('div');
+let undoRemoval = (message, currentlocalStorage) => {
 
-// const createConfirm = (message) => {
-//     return new Promise((complete, failed) => {
-//         $('#confirmMessage').text(message)
+    confirm.classList.add('confirmation');
+    confirm.innerHTML = `
+            <div class="confirm__message">
+                <p class="confirm__message_p">${message}</p>
+            </div>
 
-//         $('#confirmYes').off('click');
-//         $('#confirmNo').off('click');
+            <div class="sep"></div>
 
-//         $('#confirmYes').on('click', () => { $('.confirm').hide(); complete(true); });
-//         $('#confirmNo').on('click', () => { $('.confirm').hide(); complete(false); });
-
-//         $('.confirm').show();
-//     });
-// }
-
-// const save = async () => {
-//     const confirm = await ui.confirm('Are you sure you want to do this?');
-
-//     if (confirm) {
-//         alert('yes clicked');
-//     } else {
-//         alert('no clicked');
-//     }
-// }
-
-async function waitForConfirmation(message) {
-    return new Promise((complete, failed) => {
-        // sans JQuery
-        const confirm = document.createElement('div');
-        confirm.classList.add('confirm');
-        confirm.innerHTML = `
-            <div class="confirmation">
-                <div class="confirm__message">${message}</div>
-                <div class="confirm__buttons">
-                    <button class="confirm__button confirm__button--yes" id="confirmYes">Yes</button>
-                    <button class="confirm__button confirm__button--no" id="confirmNo">No</button>
-                </div>
+            <div class="confirm__button">
+                <span class="material-symbols-rounded undo-btn js-undo">undo</span>
             </div>
         `;
 
-        document.body.appendChild(confirm);
+    document.body.appendChild(confirm);
+    const confirmation = document.querySelector('.confirmation');
+    const confirm__message_p = document.querySelector('.confirm__message_p');
+    confirmation.animate([{
+        opacity: 0,
+        transform: 'translate(-50%, 30px)'
+    }, {
+        opacity: 1,
+        transform: 'translate(-50%, 0)'
+    }], {
+        duration: 300,
+        easing: 'ease'
+    });
 
-        const yes = document.querySelector('#confirmYes');
-        const no = document.querySelector('#confirmNo');
+    processChanges();
 
-        yes.addEventListener('click', () => {
-            confirm.remove();
-            complete(true);
-        });
+    const undo = document.querySelectorAll('.js-undo');
+    undo.forEach(undo => {
+        undo.addEventListener('click', () => {
+            localStorage.setItem('FavoritesSummoners', JSON.stringify(currentlocalStorage));
+            confirm__message_p.innerText = 'Canceled';
 
-        no.addEventListener('click', () => {
-            confirm.remove();
-            complete(false);
+            setTimeout(() => {
+                deleteConfirmation();
+                getFavorites();
+            }, 500);
+
         });
     });
 }
 
+function debounce(func, timeout = 2000) {
+    let timer;
+    return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => { func.apply(this, args); }, timeout);
+    };
+}
+
+function deleteConfirmation() {
+    fadeOut();
+    setTimeout(() => { confirm.remove(); }, 400);
+}
+
+let fadeOut = () => {
+    confirm.animate([{
+        opacity: 1,
+        transform: 'translate(-50%, 0)'
+    }, {
+        opacity: 0,
+        transform: 'translate(-50%, 30px)'
+    }], {
+        duration: 500,
+        easing: 'ease-out'
+    });
+};
+
+const processChanges = debounce(() => deleteConfirmation());
+let close;
+
 function getFavorites() {
     const section__items_container = document.querySelector(".section__items_container");
-    // console.log(section__items_container.innerHTML);
-
 
     if (JSON.parse(localStorage.getItem('FavoritesSummoners')).length !== 0) { section__items_container.innerHTML = ""; }
     for (let i = 0; i < JSON.parse(localStorage.getItem('FavoritesSummoners')).length; i++) {
@@ -121,39 +137,45 @@ function getFavorites() {
         section__items_container.appendChild(summoner);
     }
 
-    const close = document.querySelectorAll('.close');
+    close = document.querySelectorAll('.close');
     close.forEach(close => {
         close.addEventListener('click', () => {
+
+            tempLocalStorage = JSON.parse(localStorage.getItem('FavoritesSummoners'));
             const summonerName = close.parentElement.querySelector('.section__items_names').innerText;
 
-            waitForConfirmation(`Are you sure you want to remove ${summonerName} from favorites?`).then((success) => {
-                
-                if (!success) return;
-                removeFavorite(summonerName);
+            removeFavorite(summonerName);
+            close.parentElement.remove();
+            console.log(tempLocalStorage);
+            undoRemoval(`${summonerName} has been removed`, tempLocalStorage);
+            if (JSON.parse(localStorage.getItem('FavoritesSummoners')).length == 0) {
+                section__items_container.innerHTML = `
+                    <div class="section__items_wrap no_fav">
+                        <p>You don't have any favorite summoner</p>
+                    </div>
+                `;
+            }
 
-                close.parentElement.remove();
-                if (JSON.parse(localStorage.getItem('FavoritesSummoners')).length == 0) {
-                    section__items_container.innerHTML = `
-                        <div class="section__items_wrap no_fav">
-                            <p>You don't have any favorite summoner</p>
-                        </div>
-                    `;
-                }
-            });
         });
     });
 }
 
+function clickOnFavorite() {
+    const section__items_wrap = document.querySelectorAll('.section__items_wrap');
 
-
-
-
+    section__items_wrap.forEach(wrap => {
+        close = wrap.querySelector('.close');
+        wrap.addEventListener('click', (e) => {
+            if (!e.target.classList.contains('close')) {
+                searchInput.value = wrap.querySelector('.section__items_names').innerText;
+                searchInput.focus();
+                fakeButton.click();
+            }
+        });
+    });
+}
 
 document.addEventListener('DOMContentLoaded', () => {
-
-    const searchIcon = document.querySelector('.search_icon');
-    const searchInput = document.getElementById("js-search_input");
-    const search = document.getElementById('js-search');
     const sb = document.getElementById('js-region');
     const allServers = ['euw1', 'eun1', 'kr', 'na1', 'br1', 'jp1', 'la1', 'oc1', 'ru', 'tr1'];
     const allServersAlpha = ['EUW', 'EUNE', 'KR', 'NA', 'BR', 'JP', 'LAN', 'OCE', 'RU', 'TR'];
@@ -194,17 +216,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     getStars();
     getFavorites();
-
-
-
-
-
+    clickOnFavorite();
 
     async function getData(url) {
         const response = await fetch(url);
         const data = await response.json();
-
-        // TODO : Regarder si la LocalStorage est vide ou pas sinon utiliser la LocalStorage à la place Data.
 
         // console.log(data);
         getSumm(data);
@@ -216,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 getRankData(`https://champmastery.xleay.workers.dev/api/?region=${selectedServer}&endpoint=/lol/league/v4/entries/by-summoner/${data.id}`);
         }, 500);
 
-        setTimeout(() => { getStars(); }, 10);
+        setTimeout(() => { getStars(); }, 100);
 
         return data;
     }
@@ -243,43 +259,52 @@ document.addEventListener('DOMContentLoaded', () => {
 
         alreadyFavorite = JSON.parse(localStorage.getItem('FavoritesSummoners')).find(summoner => summoner.toLowerCase() === nickname.toLowerCase()) !== undefined;
 
-        // console.log(selectedServer, nickname);
         searchInput.value = '';
         searchIcon.classList.remove('search_icon--active');
         clearChampionCard();
         getData(`https://champmastery.xleay.workers.dev/api/?region=${selectedServer}&endpoint=/lol/summoner/v4/summoners/by-name/{summonerName}&summonerName=${nickname}`);
     });
 
+    function noDataInThisRegion() {
+        content.innerHTML = `
+            <div class="no_data">
+                <p>No data in this region</p>
+            </div>
+        `;
+    }
 
     function getSumm(data) {
-        content.innerHTML = `
-            <section class="summoner">
-                <div class="summoner_hero">
-                    <div class="summoner_hero__summoner">
-                        <p class="summoner_hero__p">summoner:</p>
-                        <p class="summoner_hero__name js-summoner">${data.name}</p>
-                    </div>
-
-                    <div class="summoner_hero__region">
-                        <p class="summoner_hero__p">region:</p>
-                        <p class="summoner_hero__name js-region">${allServersAlpha[sb.selectedIndex]}</p>
-                    </div>
-                </div>
-
-                <div class="summoner_icon">
-                    <div class="summoner_icon_handler">
-                        <div class="summoner_icon__img">
-                            <img class="js-summoner_icon" src="https://ddragon.leagueoflegends.com/cdn/12.10.1/img/profileicon/${data.profileIconId}.png" alt="Summoner icon" height="50" width="50">
-                            <div class="summoner_icon__level">
-                                <p class="summoner_icon__level_p js-summoner_level">${data.summonerLevel}</p>
-                            </div>
+        if (data.status.status_code == 404) { noDataInThisRegion(); }
+        else {
+            content.innerHTML = `
+                <section class="summoner">
+                    <div class="summoner_hero">
+                        <div class="summoner_hero__summoner">
+                            <p class="summoner_hero__p">summoner:</p>
+                            <p class="summoner_hero__name js-summoner">${data.name}</p>
                         </div>
-                        <span class="material-symbols-rounded star js-star ${alreadyFavorite ? 'star-active">star</span>' : '">grade</span>'}
+
+                        <div class="summoner_hero__region">
+                            <p class="summoner_hero__p">region:</p>
+                            <p class="summoner_hero__name js-region">${allServersAlpha[sb.selectedIndex]}</p>
+                        </div>
                     </div>
-                </div>
-            </section>
-        `;
-        loadHTML();
+
+                    <div class="summoner_icon">
+                        <div class="summoner_icon_handler">
+                            <div class="summoner_icon__img">
+                                <img class="js-summoner_icon" src="https://ddragon.leagueoflegends.com/cdn/12.10.1/img/profileicon/${data.profileIconId}.png" alt="Summoner icon" height="50" width="50">
+                                <div class="summoner_icon__level">
+                                    <p class="summoner_icon__level_p js-summoner_level">${data.summonerLevel}</p>
+                                </div>
+                            </div>
+                            <span class="material-symbols-rounded star js-star ${alreadyFavorite ? 'star-active">star</span>' : '">grade</span>'}
+                        </div>
+                    </div>
+                </section>
+            `;
+            loadHTML();
+        }
     }
 
     function loadHTML(data) {

@@ -94,7 +94,6 @@ select {
     background: transparent;
 }
 
-
 .arrow_down {
     content: '';
     display: block;
@@ -149,14 +148,42 @@ input::placeholder {
 /* CONFIRMATION -------------------------- */
 .confirmation {
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 50px;
-    width: 50%;
-    background: #bf1c1c;
-    border-radius: 2px;
-    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25);
+    width: fit-content;
+    background: #1B89CE;
+    border-radius: 5px;
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    gap: 10px;
+    padding: 5px 10px;
+}
+
+.confirm__message p {
+    font-size: 14px;
+    color: #ffffff;
+}
+
+.sep {
+    width: 1px;
+    height: 50%;
+    background: #68a6cd;
+}
+
+.undo-btn {
+    color: #ffffff;
+}
+
+.material-symbols-rounded.undo-btn {
+    font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 48
 }
 
 /* TOOLTIP -------------------------- */
@@ -310,6 +337,11 @@ section {
     color: #ffffff;
 }
 
+/* NODATA -------------------------------- */
+.no_data {
+    border: 1px solid #000;
+}
+
 /* SUMMONER -------------------------- */
 .summoner {
     /* border: 1px solid #000; */
@@ -397,10 +429,12 @@ section {
         color: #1B89CE;
         transform: scale(1);
     }
+
     25% {
         color: #65c4ff;
         transform: scale(1.5);
     }
+
     100% {
         color: #1B89CE;
         transform: scale(1);
@@ -513,7 +547,9 @@ section {
     height: 60px;
 }
 
-.champ_info__card__item__part1, .champ_info__card__item__part2, .champ_info__card__item__part3 {
+.champ_info__card__item__part1,
+.champ_info__card__item__part2,
+.champ_info__card__item__part3 {
     display: flex;
     justify-content: flex-start;
     align-items: center;
