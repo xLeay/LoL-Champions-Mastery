@@ -609,7 +609,7 @@ let fadeOut = ()=>{
         }
     ], {
         duration: 500,
-        easing: "ease-out"
+        easing: "ease"
     });
 };
 const processChanges = debounce(()=>deleteConfirmation());
@@ -708,6 +708,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
     let masteryData;
     let rankData;
     let alreadyFavorite = false;
+    let httpStatus;
     if (localStorage.getItem("FavoritesSummoners") == null) localStorage.setItem("FavoritesSummoners", JSON.stringify([]));
     searchInput.oninput = function() {
         if (searchInput.value.length > 0) searchIcon.classList.add("search_icon--active");
@@ -718,6 +719,8 @@ document.addEventListener("DOMContentLoaded", ()=>{
     clickOnFavorite();
     async function getData(url) {
         const response = await fetch(url);
+        // console.log(response);
+        httpStatus = response.ok;
         const data = await response.json();
         // console.log(data);
         getSumm(data);
@@ -751,16 +754,28 @@ document.addEventListener("DOMContentLoaded", ()=>{
         clearChampionCard();
         getData(`https://champmastery.xleay.workers.dev/api/?region=${selectedServer}&endpoint=/lol/summoner/v4/summoners/by-name/{summonerName}&summonerName=${nickname}`);
     });
-    function noDataInThisRegion() {
-        content.innerHTML = `
-            <div class="no_data">
-                <p>No data in this region</p>
-            </div>
-        `;
-    }
     function getSumm(data) {
-        if (data.status.status_code == 404) noDataInThisRegion();
-        else {
+        mastery.classList.remove("mastery--active");
+        if (!httpStatus) {
+            content.innerHTML = `
+                <div class="no_data">
+                    <div class="no_data_img">
+                        <img src="https://i.imgur.com/kb7jOh8.png" alt="League of Legends Leona - Data not found" loading="lazy" height="150">
+                    </div>
+                    <p class="no_data_p">This summoner is lost in the Rift</p>
+                    <button class="no_data_back">
+                        <span class="material-symbols-rounded back_arrow">arrow_back</span>
+                        Go back to lane
+                    </button>
+                </div>
+            `;
+            let noDataBack = document.querySelector(".no_data_back");
+            console.log(noDataBack);
+            noDataBack.addEventListener("click", ()=>{
+                window.location.href = "/";
+            });
+        }
+        if (httpStatus) {
             content.innerHTML = `
                 <section class="summoner">
                     <div class="summoner_hero">
