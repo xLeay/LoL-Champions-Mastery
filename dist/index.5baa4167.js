@@ -760,7 +760,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
             content.innerHTML = `
                 <div class="no_data">
                     <div class="no_data_img">
-                        <img src="https://i.imgur.com/kb7jOh8.png" alt="League of Legends Leona - Data not found" loading="lazy" height="150">
+                        <img src="https://i.imgur.com/kb7jOh8.png" alt="League of Legends Leona - Data not found" loading="lazy">
                     </div>
                     <p class="no_data_p">This summoner is lost in the Rift</p>
                     <button class="no_data_back">
@@ -793,7 +793,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
                     <div class="summoner_icon">
                         <div class="summoner_icon_handler">
                             <div class="summoner_icon__img">
-                                <img class="js-summoner_icon" src="https://ddragon.leagueoflegends.com/cdn/12.10.1/img/profileicon/${data.profileIconId}.png" alt="Summoner icon" height="50" width="50">
+                                <img class="js-summoner_icon" src="https://ddragon.leagueoflegends.com/cdn/12.10.1/img/profileicon/${data.profileIconId}.png" alt="Summoner icon">
                                 <div class="summoner_icon__level">
                                     <p class="summoner_icon__level_p js-summoner_level">${data.summonerLevel}</p>
                                 </div>
@@ -909,7 +909,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
                         champInfoCard.innerHTML = `
                             <div class="champ_info__card__item__part1">
                                 <div class="champ_info__card_img">
-                                    <img src="https://ddragon.leagueoflegends.com/cdn/12.10.1/img/champion/${Wukong ? "MonkeyKing" : name}.png" alt="${name}" height="40" width="40">
+                                    <img src="https://ddragon.leagueoflegends.com/cdn/12.10.1/img/champion/${Wukong ? "MonkeyKing" : name}.png" alt="${name}">
                                 </div>
                                 <div class="champ_info__card_name">
                                     <p>${name}</p>
@@ -920,7 +920,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
                             <div class="champ_info__card__item__part2">
                                 <div class="champ_info__card_rank">
-                                    <img src="${allRanks[rankTier]}" alt="Highest League of Legends Ranked Icon" height="40" width="40">
+                                    <img src="${allRanks[rankTier]}" alt="Highest League of Legends Ranked Icon">
                                 </div>
                             </div>
 
@@ -945,7 +945,6 @@ document.addEventListener("DOMContentLoaded", ()=>{
         listaus.style.display = "none";
         champAlreadyClicked = [];
     }
-// TODO : Dark mode et style PC
 });
 
 },{"./champ.json":"5PXR7"}],"5PXR7":[function(require,module,exports) {
