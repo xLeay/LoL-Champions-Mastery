@@ -881,6 +881,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
                     let championMastery;
                     let rankDivision;
                     let rankTier;
+                    let champ;
                     masteryData.then((value)=>{
                         for(champ in value)if (value.hasOwnProperty(champ)) {
                             if (value[champ].championId == championId) {

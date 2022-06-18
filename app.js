@@ -426,6 +426,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     let rankDivision;
                     let rankTier;
 
+                    let champ;
                     masteryData.then(
                         value => {
                             for (champ in value) {
