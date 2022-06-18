@@ -425,8 +425,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     let championMastery;
                     let rankDivision;
                     let rankTier;
-
                     let champ;
+                    let rank;
+
                     masteryData.then(
                         value => {
                             for (champ in value) {
