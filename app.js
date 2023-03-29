@@ -308,7 +308,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="summoner_icon">
                         <div class="summoner_icon_handler">
                             <div class="summoner_icon__img">
-                                <img class="js-summoner_icon" src="https://ddragon.leagueoflegends.com/cdn/12.10.1/img/profileicon/${data.profileIconId}.png" alt="Summoner icon">
+                                <img class="js-summoner_icon" src="https://ddragon.leagueoflegends.com/cdn/13.6.1/img/profileicon/${data.profileIconId}.png" alt="Summoner icon">
                                 <div class="summoner_icon__level">
                                     <p class="summoner_icon__level_p js-summoner_level">${data.summonerLevel}</p>
                                 </div>
